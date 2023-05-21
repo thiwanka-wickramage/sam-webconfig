@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../sam-test-app"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

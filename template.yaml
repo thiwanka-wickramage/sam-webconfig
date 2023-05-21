@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-test-app
+
+  Sample SAM Template for sam-test-app
+
+Parameters:
+  Stage:
+    Type: String
+    Default: stage
+
+Globals:
+  Function:
+    Timeout: 3
+    Runtime: nodejs18.x
+    Architectures:
+      - x86_64
+
+Resources:
+  SignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/user
+      Handler: sign-up.handler
+      Events:
+        SignUp:
+          Type: Api
+          Properties:
+            Path: /sign-up
+            Method: post
+            RestApiId: !Ref ApiDeployment
+  SignInFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/user
+      Handler: sign-in.handler
+      Events:
+        SignIn:
+          Type: Api
+          Properties:
+            Path: /sign-in
+            Method: post
+            RestApiId: !Ref ApiDeployment
+  GetAllPostFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/post
+      Handler: get-posts.handler
+      Events:
+        GetAllPost:
+          Type: Api
+          Properties:
+            Path: /posts
+            Method: get
+            RestApiId: !Ref ApiDeployment
+
+  ApiDeployment:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+# Outputs:
+#   SignUpFunc:
+#     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+#     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+#   HelloWorldFunction:
+#     Description: "Hello World Lambda Function ARN"
+#     Value: !GetAtt HelloWorldFunction.Arn
+#   HelloWorldFunctionIamRole:
+#     Description: "Implicit IAM Role created for Hello World function"
+#     Value: !GetAtt HelloWorldFunctionRole.Arn
